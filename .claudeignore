@@ -1,0 +1,36 @@
+# dependencies
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+
+# native
+.kotlin/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+/ios
+/android
+
+# metro
+.metro-health-check*
+
+# macOS
+.DS_Store
+*.pem
+
+# env
+.env*.local
+
+# typescript build info
+*.tsbuildinfo
+
+# lockfiles (noisy, rarely need full content)
+package-lock.json
+
+# reference/example code (not part of active app)
+example/
