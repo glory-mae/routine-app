@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
@@ -21,6 +21,12 @@ export default function TaskEdit() {
   const existing = taskId ? routine?.tasks.find((t) => t.id === taskId) : undefined;
 
   const [name, setName] = useState(existing?.name ?? "");
+  // Latest typed text, read by save() so a tap right after typing never sees a stale name.
+  const nameRef = useRef(name);
+  const changeName = (text: string) => {
+    nameRef.current = text;
+    setName(text);
+  };
   const [hasTime, setHasTime] = useState(!!existing?.time);
   const [time, setTime] = useState(existing?.time ?? routine?.time ?? DEFAULT_TIME);
 
@@ -39,7 +45,7 @@ export default function TaskEdit() {
   }
 
   const save = () => {
-    const trimmed = name.trim();
+    const trimmed = nameRef.current.trim();
     if (!trimmed) {
       Alert.alert("Name Required", "Give your task a name before saving.");
       return;
@@ -79,7 +85,7 @@ export default function TaskEdit() {
             <TextInput
               style={styles.input}
               value={name}
-              onChangeText={setName}
+              onChangeText={changeName}
               placeholder="e.g. Apply serum"
               placeholderTextColor={colors.textSecondary}
               autoFocus={!existing}
