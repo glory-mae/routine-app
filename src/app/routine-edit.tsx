@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
@@ -27,6 +27,12 @@ export default function RoutineEdit() {
   const existing = id ? getRoutine(id) : undefined;
 
   const [name, setName] = useState(existing?.name ?? "");
+  // Latest typed text, read by save() so a tap right after typing never sees a stale name.
+  const nameRef = useRef(name);
+  const changeName = (text: string) => {
+    nameRef.current = text;
+    setName(text);
+  };
   const [frequency, setFrequency] = useState<Frequency>(existing?.frequency ?? "daily");
   const [days, setDays] = useState<number[]>(
     existing?.frequency === "weekly" ? existing.days : []
@@ -54,7 +60,7 @@ export default function RoutineEdit() {
   };
 
   const save = () => {
-    const trimmed = name.trim();
+    const trimmed = nameRef.current.trim();
     if (!trimmed) {
       Alert.alert("Name Required", "Give your routine a name before saving.");
       return;
@@ -98,7 +104,7 @@ export default function RoutineEdit() {
             <TextInput
               style={styles.input}
               value={name}
-              onChangeText={setName}
+              onChangeText={changeName}
               placeholder="e.g. Night Routine"
               placeholderTextColor={colors.textSecondary}
               autoFocus={!existing}

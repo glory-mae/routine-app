@@ -28,7 +28,7 @@ export default function NotificationPrePrompt() {
         </View>
         <Text style={styles.title}>Stay on track</Text>
         <Text style={styles.body}>
-          Rune can send a gentle reminder when it's time for a routine — only for the times you
+          Rune can send a gentle reminder when it&apos;s time for a routine — only for the times you
           set, nothing else.
         </Text>
         <Pressable style={styles.primaryButton} onPress={enable}>
